@@ -6,24 +6,127 @@
     <title>LESSON-form-validation-with-js</title>
   </head>
   <body>
-    <!--  Email, Country, Zip Code, Password and Password Confirmation fields. -->
     <form id="form-1" novalidate>
+      <!-- form outline -->
       <fieldset>
         <legend>Please fill out form</legend>
         <span id="required-fields-message">* required</span>
         <div class="form-field-lines-container">
-          <div class="form-field-line">
-            <label for="email">
-              <span class="form-field-line-instructions"
-                >*Please enter email address:
-              </span>
-              <input type="email" id="email-input" name="email" required />
-              <span class="form-field-line-error-message" aria-live="polite">
-                <!-- js adds message -->
-              </span>
-            </label>
-          </div>
+          <!-- personal info -->
+          <fieldset>
+            <legend>Personal Information</legend>
+            <div class="form-sub-section">
+              <!-- email input -->
+              <div class="form-field-line">
+                <label for="email-input">
+                  <div class="non-error-container">
+                    <span class="form-field-line-instructions"
+                      >* Please enter email address:
+                    </span>
+                    <input
+                      type="email"
+                      id="email-input"
+                      name="email-input"
+                      required
+                    />
+                  </div>
+                  <div class="form-field-line-error-message" aria-live="polite">
+                    <!-- js adds error message -->
+                  </div>
+                </label>
+              </div>
+
+              <!-- country input -->
+              <div class="form-field-line">
+                <label for="country-input">
+                  <div class="non-error-container">
+                    <span class="form-field-line-instructions">
+                      * Please select country of residence:
+                    </span>
+                    <select id="country-input" name="country-input" required>
+                      <option value="">Select country</option>
+                      <option value="CA">Canada</option>
+                      <option value="MX">Mexico</option>
+                      <option value="US">United States</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-field-line-error-message" aria-live="polite">
+                    <!-- js adds error message -->
+                  </div>
+                </label>
+              </div>
+
+              <!-- zip code input -->
+              <div class="form-field-line">
+                <label for="zip-code-input">
+                  <div class="non-error-container">
+                    <span class="form-field-line-instructions"
+                      >* Please enter zip code:
+                    </span>
+                    <input
+                      type="text"
+                      id="zip-code-input"
+                      name="zip-code-input"
+                      maxlength="5"
+                      required
+                    />
+                  </div>
+                  <div class="form-field-line-error-message" aria-live="polite">
+                    <!-- js adds error message -->
+                  </div>
+                </label>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- password creation -->
+          <fieldset>
+            <legend>Password Creation</legend>
+            <div class="form-sub-section">
+              <!-- password input -->
+              <div class="form-field-line">
+                <label for="password-input">
+                  <div class="non-error-container">
+                    <span class="form-field-line-instructions"
+                      >* Please create password:
+                    </span>
+                    <input
+                      type="text"
+                      id="password-input"
+                      name="password-input"
+                      required
+                    />
+                  </div>
+                  <div class="form-field-line-error-message" aria-live="polite">
+                    <!-- js adds error message -->
+                  </div>
+                </label>
+              </div>
+
+              <!-- confirm password input -->
+              <div class="form-field-line">
+                <label for="confirm-password-input">
+                  <div class="non-error-container">
+                    <span class="form-field-line-instructions"
+                      >* Please confirm password:
+                    </span>
+                    <input
+                      type="text"
+                      id="confirm-password-input"
+                      name="confirm-password-input"
+                      required
+                    />
+                  </div>
+                  <div class="form-field-line-error-message" aria-live="polite">
+                    <!-- js adds error message -->
+                  </div>
+                </label>
+              </div>
+            </div>
+          </fieldset>
         </div>
+        <button type="submit" id="form-1-submit-btn">Submit</button>
       </fieldset>
     </form>
   </body>

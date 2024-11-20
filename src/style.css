@@ -8,11 +8,11 @@
   /* debugging */
   * {
     /* outline: solid red 1px; */
-    background-color: beige;
   }
 }
 
 body {
+  background-color: beige;
   padding: var(--spacing);
 }
 
@@ -20,9 +20,23 @@ form#form-1 {
   width: max-content;
   margin: auto;
 
+  /* all fieldsets */
+  fieldset {
+    padding: var(--spacing);
+    padding-bottom: calc(1.5 * var(--spacing));
+  }
+
+  /* outermost fieldset */
+  > fieldset {
+    padding-top: 0;
+    padding-bottom: var(--spacing);
+  }
+
+  /* all legends */
   legend {
     margin-left: var(--spacing);
-    /* margin-bottom: -0.5rem; */
+
+    padding: 0 calc(0.25 * var(--spacing));
   }
 
   #required-fields-message {
@@ -30,9 +44,69 @@ form#form-1 {
     font-style: italic;
     font-size: smaller;
     color: red;
+
+    position: relative;
+    bottom: 5px;
   }
 
+  /* all fields/inner-fieldsets container */
   .form-field-lines-container {
     margin: var(--spacing);
+    margin-top: 0;
+
+    display: grid;
+    gap: var(--spacing);
+
+    .form-sub-section {
+      display: grid;
+      gap: calc(0.5 * var(--spacing));
+
+      .form-field-line {
+        .form-field-line-instructions {
+          margin-right: var(--spacing);
+        }
+
+        /* user input (first sibling of line instructions_  */
+        .form-field-line-instructions + * {
+          padding: 0 calc(0.5 * var(--spacing));
+        }
+
+        .non-error-container {
+          display: flex;
+          justify-content: end;
+        }
+
+        /* odd balls */
+        #zip-code-input {
+          width: 110px;
+        }
+      }
+    }
+  }
+
+  #form-1-submit-btn {
+    /* margin: 0 var(--spacing); */
+    display: block;
+    /* margin-right: calc(1rem + var(--spacing)); */
+    margin-right: var(--spacing);
+    margin-left: auto;
+
+    padding: 0 var(--spacing);
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+/* ================================= catch alls ================================= */
+input,
+select,
+button {
+  border: black solid 1px;
+
+  &:hover,
+  &:focus {
+    outline: black solid 1px;
   }
 }
