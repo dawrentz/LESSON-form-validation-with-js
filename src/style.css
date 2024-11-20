@@ -1,0 +1,13 @@
+/* style.css */
+
+@import url("./reset.css");
+
+:root {
+  /* variables */
+
+  /* debugging */
+  * {
+    /* outline: solid red 1px; */
+    background-color: aquamarine;
+  }
+}
