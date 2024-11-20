@@ -3,10 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>newProject</title>
+    <title>LESSON-form-validation-with-js</title>
   </head>
   <body>
-    <!-- test -->
-    hello
+    <!--  Email, Country, Zip Code, Password and Password Confirmation fields. -->
+    <form id="form-1" novalidate>
+      <fieldset>
+        <legend>Please fill out form</legend>
+        <span id="required-fields-message">* required</span>
+        <div class="form-field-lines-container">
+          <div class="form-field-line">
+            <label for="email">
+              <span class="form-field-line-instructions"
+                >*Please enter email address:
+              </span>
+              <input type="email" id="email-input" name="email" required />
+              <span class="form-field-line-error-message" aria-live="polite">
+                <!-- js adds message -->
+              </span>
+            </label>
+          </div>
+        </div>
+      </fieldset>
+    </form>
   </body>
 </html>
