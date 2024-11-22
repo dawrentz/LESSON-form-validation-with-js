@@ -10,7 +10,9 @@
       <!-- form outline -->
       <fieldset>
         <legend>Please fill out form</legend>
-        <span id="required-fields-message">* required</span>
+        <span id="required-fields-message" class="fields-message">
+          * required
+        </span>
         <div class="form-field-lines-container">
           <!-- personal info -->
           <fieldset>
@@ -68,8 +70,10 @@
                       type="text"
                       id="zip-code-input"
                       name="zip-code-input"
+                      minlength="5"
                       maxlength="5"
                       required
+                      pattern="\d{5}"
                     />
                   </div>
                   <div class="form-field-line-error-message" aria-live="polite">
@@ -83,6 +87,16 @@
           <!-- password creation -->
           <fieldset>
             <legend>Password Creation</legend>
+            <span class="fields-message">
+              Password must contain at least:
+              <ul>
+                <li>- five characters</li>
+                <li>- one uppercase letter</li>
+                <li>- one lowercase letter</li>
+                <li>- one digit</li>
+                <li>- one special character</li>
+              </ul>
+            </span>
             <div class="form-sub-section">
               <!-- password input -->
               <div class="form-field-line">
@@ -126,6 +140,7 @@
             </div>
           </fieldset>
         </div>
+        <!-- <button type="submit" id="form-1-submit-btn">Submit</button> -->
         <button type="submit" id="form-1-submit-btn">Submit</button>
       </fieldset>
     </form>

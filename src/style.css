@@ -23,13 +23,18 @@ form#form-1 {
   /* all fieldsets */
   fieldset {
     padding: var(--spacing);
-    padding-bottom: calc(1.5 * var(--spacing));
+    padding-bottom: calc(0.5 * var(--spacing));
   }
 
   /* outermost fieldset */
   > fieldset {
-    padding-top: 0;
+    padding: 0;
     padding-bottom: var(--spacing);
+
+    /* password fieldset */
+    fieldset:last-child {
+      padding-top: 0;
+    }
   }
 
   /* all legends */
@@ -39,14 +44,32 @@ form#form-1 {
     padding: 0 calc(0.25 * var(--spacing));
   }
 
-  #required-fields-message {
-    padding-left: var(--spacing);
+  .fields-message {
+    display: inline-block;
+
+    padding-left: calc(1.5 * var(--spacing));
     font-style: italic;
     font-size: smaller;
-    color: red;
 
     position: relative;
     bottom: 5px;
+
+    max-width: 25rem;
+
+    /* password requirements list */
+    ul {
+      list-style-type: none;
+      padding-left: var(--spacing);
+      margin-bottom: calc(0.75 * var(--spacing));
+
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: var(--spacing);
+    }
+  }
+
+  #required-fields-message {
+    color: red;
   }
 
   /* all fields/inner-fieldsets container */
@@ -66,14 +89,25 @@ form#form-1 {
           margin-right: var(--spacing);
         }
 
-        /* user input (first sibling of line instructions_  */
+        /* user input (first sibling of line instructions)  */
         .form-field-line-instructions + * {
-          padding: 0 calc(0.5 * var(--spacing));
+          padding: 0 calc(0.2 * var(--spacing));
         }
 
         .non-error-container {
           display: flex;
           justify-content: end;
+        }
+
+        .form-field-line-error-message {
+          color: red;
+          text-align: end;
+          font-style: italic;
+
+          --sizing: 0.85rem;
+
+          height: var(--sizing);
+          font-size: var(--sizing);
         }
 
         /* odd balls */
@@ -87,8 +121,8 @@ form#form-1 {
   #form-1-submit-btn {
     /* margin: 0 var(--spacing); */
     display: block;
-    /* margin-right: calc(1rem + var(--spacing)); */
-    margin-right: var(--spacing);
+    margin-right: calc(1rem + var(--spacing));
+    /* margin-right: var(--spacing); */
     margin-left: auto;
 
     padding: 0 var(--spacing);
@@ -108,5 +142,10 @@ button {
   &:hover,
   &:focus {
     outline: black solid 1px;
+  }
+
+  /* add a "touched" class in js to trigger this? */
+  &:invalid {
+    /* border: red solid 1px; */
   }
 }

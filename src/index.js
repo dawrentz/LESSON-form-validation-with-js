@@ -2,10 +2,9 @@
 
 //imports
 import "./style.css";
-
-//declarations
+import * as formValidationMod from "./formValidationMod.js";
 
 // ====================================== Init ====================================== //
 
-//test
-console.log("test");
+//init formValidation
+formValidationMod.initFormValidation();
