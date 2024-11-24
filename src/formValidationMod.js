@@ -3,11 +3,9 @@
 //declarations
 const form1 = document.querySelector("#form-1");
 
-const emailInput = document.querySelector("#email-input");
-const countryInput = document.querySelector("#country-input");
-const zipCodeInput = document.querySelector("#zip-code-input");
-const passwordInput = document.querySelector("#password-input");
-const confirmPasswordInput = document.querySelector("#confirm-password-input");
+const allFieldInputs = document.querySelectorAll(
+  "[data-special-class='form-input-field']"
+);
 
 // ======================================== Major Functions ======================================== //
 
@@ -35,116 +33,94 @@ function addELtoFromSubmit() {
 }
 
 function addELsToFormInputs() {
-  emailInput.addEventListener("blur", () => {
-    showEmailErrorMessage();
+  //Check for/update error when leave input focus. For inoffensive UI (delayed negative feedback)
+  allFieldInputs.forEach((fieldInput) => {
+    fieldInput.addEventListener("blur", () => {
+      showErrorMessage(fieldInput);
+    });
   });
 
-  countryInput.addEventListener("blur", () => {
-    showCountryErrorMessage();
-  });
-
-  zipCodeInput.addEventListener("blur", () => {
-    showZipErrorMessage();
-  });
-
-  passwordInput.addEventListener("blur", () => {
-    showPasswordErrorMessage();
-  });
-
-  confirmPasswordInput.addEventListener("blur", () => {
-    showConfirmPasswordErrorMessage();
+  //Check for no error on each input. For immediate positive feedback: nice UI
+  allFieldInputs.forEach((fieldInput) => {
+    fieldInput.addEventListener("input", () => {
+      // showErrorMessage(fieldInput);
+      if (fieldInput.checkValidity()) {
+        removeErrorMessage(fieldInput);
+      }
+    });
   });
 }
 
-// ======================================== Functions ======================================== //
+// ======================================== Derived/Special Functions ======================================== //
 
-function showEmailErrorMessage() {
+function showErrorMessage(fieldInput) {
   //get errorMessageElm and error message
-  const errorElm = getErrorElm(emailInput);
-  const errorMessage = getErrorMessage(emailInput);
+  const errorElm = getErrorElm(fieldInput);
+  const errorMessage = getErrorMessage(fieldInput);
   setErrorMessage(errorElm, errorMessage);
 }
 
-function showCountryErrorMessage() {
-  //get errorMessageElm and error message
-  const errorElm = getErrorElm(countryInput);
-  const errorMessage = getErrorMessage(countryInput);
-  setErrorMessage(errorElm, errorMessage);
+//for input-event (checks for only valid on each input)
+function removeErrorMessage(inputEventElm) {
+  const errorElm = getErrorElm(inputEventElm);
+  setErrorMessage(errorElm, "");
 }
 
-function showZipErrorMessage() {
-  //get errorMessageElm and error message
-  const errorElm = getErrorElm(zipCodeInput);
-  const errorMessage = getErrorMessage(zipCodeInput);
-  setErrorMessage(errorElm, errorMessage);
-}
-
-function showPasswordErrorMessage() {
-  //get errorMessageElm and error message
-  const errorElm = getErrorElm(passwordInput);
-  const errorMessage = getErrorMessage(passwordInput);
-  setErrorMessage(errorElm, errorMessage);
-}
-
-function showConfirmPasswordErrorMessage() {
-  //get errorMessageElm and error message
-  const errorElm = getErrorElm(confirmPasswordInput);
-  const errorMessage = getErrorMessage(confirmPasswordInput);
-  setErrorMessage(errorElm, errorMessage);
-}
-
+//group all field inputs and list out all error cases. Like an accessable databank
 function getErrorMessage(inputElm) {
-  let errorMessage = "";
+  let errorMessage;
 
   //email-input
-  if (inputElm === emailInput) {
+  if (inputElm.id === "email-input") {
     //error cases
-    if (emailInput.validity.typeMismatch) {
+    if (inputElm.validity.typeMismatch) {
       errorMessage = "Please enter a valid email address";
-    } else if (emailInput.value === "") {
+    } else if (inputElm.value === "") {
       errorMessage = "Please enter your email";
     }
   }
 
   //country-input
-  if (inputElm === countryInput) {
+  if (inputElm.id === "country-input") {
     //error cases
-    if (countryInput.value === "") {
+    if (inputElm.value === "") {
       errorMessage = "Please enter your country of residence";
     }
   }
 
   //zip-code-input
   //need cases for other countries
-  if (inputElm === zipCodeInput) {
+  if (inputElm.id === "zip-code-input") {
     //error cases
-    if (zipCodeInput.validity.tooShort) {
-      errorMessage = `Please enter ${zipCodeInput.maxLength - zipCodeInput.value.length} more digits`;
-    } else if (zipCodeInput.value === "") {
+    if (inputElm.validity.tooShort) {
+      errorMessage = `Please enter ${inputElm.maxLength - inputElm.value.length} more digits`;
+    } else if (inputElm.value === "") {
       errorMessage = "Please enter your zip code";
-    } else if (zipCodeInput.validity.patternMismatch) {
+    } else if (inputElm.validity.patternMismatch) {
       errorMessage = "Please enter 5 digit zip code";
     }
   }
 
   //password-input
-  if (inputElm === passwordInput) {
+  if (inputElm.id === "password-input") {
     //error cases
-    if (passwordInput.value === "") {
+    if (inputElm.value === "") {
       errorMessage = "Please create a password";
     }
   }
 
   //confirm-password-input
-  if (inputElm === confirmPasswordInput) {
+  if (inputElm.id === "confirm-password-input") {
     //error cases
-    if (confirmPasswordInput.value === "") {
+    if (inputElm.value === "") {
       errorMessage = "Please confirm your password";
     }
   }
 
   return errorMessage;
 }
+
+// ======================================== Generic Functions ======================================== //
 
 function getErrorElm(inputElm) {
   const errorElm = inputElm.parentElement.parentElement.querySelector(

@@ -29,6 +29,7 @@
                       type="email"
                       id="email-input"
                       name="email-input"
+                      data-special-class="form-input-field"
                       required
                     />
                   </div>
@@ -45,7 +46,12 @@
                     <span class="form-field-line-instructions">
                       * Please select country of residence:
                     </span>
-                    <select id="country-input" name="country-input" required>
+                    <select
+                      id="country-input"
+                      name="country-input"
+                      data-special-class="form-input-field"
+                      required
+                    >
                       <option value="">Select country</option>
                       <option value="CA">Canada</option>
                       <option value="MX">Mexico</option>
@@ -72,8 +78,9 @@
                       name="zip-code-input"
                       minlength="5"
                       maxlength="5"
-                      required
                       pattern="\d{5}"
+                      data-special-class="form-input-field"
+                      required
                     />
                   </div>
                   <div class="form-field-line-error-message" aria-live="polite">
@@ -109,6 +116,7 @@
                       type="text"
                       id="password-input"
                       name="password-input"
+                      data-special-class="form-input-field"
                       required
                     />
                   </div>
@@ -129,6 +137,7 @@
                       type="text"
                       id="confirm-password-input"
                       name="confirm-password-input"
+                      data-special-class="form-input-field"
                       required
                     />
                   </div>
@@ -140,7 +149,6 @@
             </div>
           </fieldset>
         </div>
-        <!-- <button type="submit" id="form-1-submit-btn">Submit</button> -->
         <button type="submit" id="form-1-submit-btn">Submit</button>
       </fieldset>
     </form>
