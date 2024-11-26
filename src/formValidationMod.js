@@ -9,6 +9,8 @@ const allFieldInputs = document.querySelectorAll(
 );
 const countryInput = document.querySelector("#country-input");
 const zipCodeInput = document.querySelector("#zip-code-input");
+const passwordInput = document.querySelector("#password-input");
+const confirmPasswordInput = document.querySelector("#confirm-password-input");
 
 // ======================================== Major Functions ======================================== //
 
@@ -24,9 +26,19 @@ function addELtoFromSubmit() {
     if (form1.checkValidity()) {
       console.log("high five");
       form1.reset();
+
+      allFieldInputs.forEach((fieldInput) => {
+        removeClassFromElm(fieldInput, "touched");
+      });
     } else {
       // showFormInputError(event);
+
+      //may be issue where the user can submit form with differnt passwords (submit only checks for pattern and required and such) could build own checkValid funtion
       console.log("error in form");
+      allFieldInputs.forEach((fieldInput) => {
+        showErrorMessage(fieldInput);
+        addClassToElm(fieldInput, "touched");
+      });
     }
 
     //novalidate is turned on in html
@@ -78,6 +90,16 @@ function addELsToFormInputs() {
       showErrorMessage(zipCodeInput);
     }
   });
+
+  //on password touch
+  passwordInput.addEventListener("blur", () => {
+    if (passwordInput.checkValidity()) {
+      updateConfirmPasswordPattern();
+    }
+  });
+
+  //on confirm-password input
+  confirmPasswordInput.addEventListener("input", () => {});
 }
 
 // ======================================== Derived/Special Functions ======================================== //
@@ -126,6 +148,7 @@ function getErrorMessage(inputElm) {
     if (countryInput.value === "US" || countryInput.value === "MX") {
       //zip is too short or contains non-numbers
 
+      //change to "if no only contain numbers"
       if (inputElm.validity.patternMismatch) {
         errorMessage = "Please enter five digit zip code";
       }
@@ -143,9 +166,16 @@ function getErrorMessage(inputElm) {
         errorMessage =
           'Please follow pattern: "ANA NAN" (A = alpha, N = number)';
       }
+      if (/[DFIOQU]/.test(inputElm.value)) {
+        errorMessage = "Please do not use D, F, I, O, Q, or U";
+      }
+      if (/^[WZ]/.test(inputElm.value)) {
+        errorMessage = "Please do not use W or Z for the first letter";
+      }
+      if (/[a-z]/.test(inputElm.value)) {
+        errorMessage = "No lowercase letters please";
+      }
     }
-    //run checks for each
-    //  (a = alpha, n = number), <br> no D, F, I, O, Q, or U anywhere and no W and Z for first letter';
 
     //no input
     if (inputElm.value === "") {
@@ -164,6 +194,9 @@ function getErrorMessage(inputElm) {
     if (inputElm.value === "") {
       errorMessage = "Please create a password";
     }
+    if (inputElm.validity.patternMismatch || inputElm.validity.tooShort) {
+      errorMessage = "Please fulfill password requirements";
+    }
   }
 
   //confirm-password-input
@@ -171,6 +204,9 @@ function getErrorMessage(inputElm) {
     //error cases
     if (inputElm.value === "") {
       errorMessage = "Please confirm your password";
+    }
+    if (passwordInput.value !== inputElm.value) {
+      errorMessage = "Passwords do no match. Please confirm.";
     }
   }
 
@@ -202,6 +238,10 @@ function updateZipCodePattern() {
   }
 }
 
+function updateConfirmPasswordPattern() {
+  confirmPasswordInput.setAttribute("pattern", passwordInput.value);
+}
+
 // ======================================== Generic Functions ======================================== //
 
 function getErrorElm(inputElm) {
@@ -216,10 +256,10 @@ function setErrorMessage(elm, message) {
   elm.textContent = message;
 }
 
-function isOnlyNumbers(str) {
-  return /^[0-9]+$/.test(str);
-}
-
 function addClassToElm(elm, className) {
   elm.classList.add(className);
+}
+
+function removeClassFromElm(elm, className) {
+  elm.classList.remove(className);
 }

@@ -56,6 +56,7 @@
                       <option value="CA">Canada</option>
                       <option value="MX">Mexico</option>
                       <option value="US">United States</option>
+                      <!-- could create pop up text-input for "other" -->
                       <option value="other">Other</option>
                     </select>
                   </div>
@@ -95,6 +96,7 @@
             <span class="fields-message">
               Password must contain at least:
               <ul>
+                <!-- could add dynamic checks to each as user inputs password -->
                 <li>- five characters</li>
                 <li>- one uppercase letter</li>
                 <li>- one lowercase letter</li>
@@ -115,6 +117,8 @@
                       id="password-input"
                       name="password-input"
                       data-special-class="form-input-field"
+                      pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\(\)_\+\-=\{\}\[\]\|\\;:'&quot;<>,.?\/`~]).+"
+                      minlength="5"
                       required
                     />
                   </div>
