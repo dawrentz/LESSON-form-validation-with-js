@@ -77,6 +77,7 @@
                     <input
                       type="text"
                       id="zip-code-input"
+                      class="no-country-input"
                       name="zip-code-input"
                       data-special-class="form-input-field"
                       required
@@ -117,7 +118,7 @@
                       id="password-input"
                       name="password-input"
                       data-special-class="form-input-field"
-                      pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\(\)_\+\-=\{\}\[\]\|\\;:'&quot;<>,.?\/`~]).+"
+                      pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[! @#\$%\^&\*\(\)_\+\-=\{\}\[\]\|\\;:'&quot;<>,.?\/`~]).+"
                       minlength="5"
                       required
                     />
@@ -138,6 +139,7 @@
                     <input
                       type="text"
                       id="confirm-password-input"
+                      class="no-set-password no-match-password"
                       name="confirm-password-input"
                       data-special-class="form-input-field"
                       required

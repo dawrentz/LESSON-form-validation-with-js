@@ -121,7 +121,7 @@ form#form-1 {
   #form-1-submit-btn {
     /* margin: 0 var(--spacing); */
     display: block;
-    margin-right: calc(1rem + var(--spacing));
+    margin-right: calc(0rem + var(--spacing));
     /* margin-right: var(--spacing); */
     margin-left: auto;
 
@@ -134,6 +134,7 @@ form#form-1 {
 }
 
 /* ================================= catch alls ================================= */
+
 input,
 select,
 button {
@@ -145,7 +146,35 @@ button {
   }
 
   /* add a "touched" class in js to trigger this? */
-  &:invalid {
-    /* border: red solid 1px; */
+
+  &:invalid&.touched {
+    border: red solid 1px;
+
+    &:hover,
+    &:focus {
+      outline: red solid 1px;
+    }
   }
 }
+
+/* special case: password is not set but confirm password has been touched and has error message */
+#confirm-password-input.no-set-password.touched,
+#confirm-password-input.no-match-password.touched {
+  border: red solid 1px;
+
+  &:hover,
+  &:focus {
+    outline: red solid 1px;
+  }
+}
+
+#zip-code-input.no-country-input.touched {
+  border: red solid 1px;
+
+  &:hover,
+  &:focus {
+    outline: red solid 1px;
+  }
+}
+/* special case: password is not set but confirm password has been touched and has error message */
+/* same for zip without selection, if no-country-input and touched, then red outline */

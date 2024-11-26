@@ -20,6 +20,8 @@ export function initFormValidation() {
 }
 
 // ======================================== ELs ======================================== //
+{
+} //spacer
 
 function addELtoFromSubmit() {
   form1.addEventListener("submit", (event) => {
@@ -33,7 +35,6 @@ function addELtoFromSubmit() {
     } else {
       // showFormInputError(event);
 
-      //may be issue where the user can submit form with differnt passwords (submit only checks for pattern and required and such) could build own checkValid funtion
       console.log("error in form");
       allFieldInputs.forEach((fieldInput) => {
         showErrorMessage(fieldInput);
@@ -47,8 +48,9 @@ function addELtoFromSubmit() {
   });
 }
 
+//these should probably all be individual checkerFunctions, but ain't nobody got time for that
 function addELsToFormInputs() {
-  //ELs for when the user leaves input focus. For inoffensive UI (delayed negative feedback/checks)
+  //on any input blur. For inoffensive UI (delayed negative feedback/checks)
   allFieldInputs.forEach((fieldInput) => {
     fieldInput.addEventListener("blur", () => {
       //Check for/update error
@@ -59,11 +61,15 @@ function addELsToFormInputs() {
     });
   });
 
-  //Check for no error on each input. For immediate positive feedback: nice UI
+  //on any input input. For immediate positive feedback: nice UI
   allFieldInputs.forEach((fieldInput) => {
     fieldInput.addEventListener("input", () => {
-      // showErrorMessage(fieldInput);
-      if (fieldInput.checkValidity()) {
+      //Check for no error on each input (if already touched)
+      if (fieldInput.classList.contains("touched")) {
+        showErrorMessage(fieldInput);
+      }
+      //on all other inputs, just erase error-message on valid-input
+      else if (fieldInput.checkValidity()) {
         removeErrorMessage(fieldInput);
       }
     });
@@ -71,11 +77,16 @@ function addELsToFormInputs() {
 
   //on country input
   countryInput.addEventListener("change", () => {
-    //add "touched" class to country input on country selection
-    addClassToElm(countryInput, "touched");
-
     //update zip pattern
     updateZipCodePattern();
+    //works a little differnt that the <input>'s
+    showErrorMessage(countryInput);
+
+    if (countryInput.value !== "") {
+      removeClassFromElm(zipCodeInput, "no-country-input");
+    } else {
+      addClassToElm(zipCodeInput, "no-country-input");
+    }
 
     //check zip code error here
     if (zipCodeInput.classList.contains("touched")) {
@@ -85,7 +96,7 @@ function addELsToFormInputs() {
 
   // on zip input (for digit counter)
   zipCodeInput.addEventListener("input", () => {
-    //only counts if already initiated ("touched")
+    //only counts if already initiated (that is, "touched")
     if (zipCodeInput.classList.contains("touched")) {
       showErrorMessage(zipCodeInput);
     }
@@ -98,12 +109,42 @@ function addELsToFormInputs() {
     }
   });
 
-  //on confirm-password input
-  confirmPasswordInput.addEventListener("input", () => {});
+  //on password input
+  passwordInput.addEventListener("input", () => {
+    if (passwordInput.checkValidity()) {
+      removeClassFromElm(confirmPasswordInput, "no-set-password");
+    } else {
+      addClassToElm(confirmPasswordInput, "no-set-password");
+    }
+
+    if (passwordInput.value === confirmPasswordInput.value) {
+      removeClassFromElm(confirmPasswordInput, "no-match-password");
+    } else {
+      addClassToElm(confirmPasswordInput, "no-match-password");
+    }
+
+    //confirmpass touched run errorcheck
+    if (confirmPasswordInput.classList.contains("touched")) {
+      showErrorMessage(confirmPasswordInput);
+    }
+  });
+
+  //on confirm password input
+  confirmPasswordInput.addEventListener("input", () => {
+    //DRY, oops. really should make all these cases into checkerFunctions
+    if (passwordInput.value === confirmPasswordInput.value) {
+      removeClassFromElm(confirmPasswordInput, "no-match-password");
+    } else {
+      addClassToElm(confirmPasswordInput, "no-match-password");
+    }
+  });
 }
 
 // ======================================== Derived/Special Functions ======================================== //
+{
+} //spacer
 
+//does not erase error messages
 function showErrorMessage(fieldInput) {
   //get errorMessageElm and error message
   const errorElm = getErrorElm(fieldInput);
@@ -146,17 +187,15 @@ function getErrorMessage(inputElm) {
 
     // USA/Mexico
     if (countryInput.value === "US" || countryInput.value === "MX") {
-      //zip is too short or contains non-numbers
+      if (inputElm.validity.tooShort) {
+        const numDigitsNeeded = inputElm.maxLength - inputElm.value.length;
+        let sCharacter = numDigitsNeeded > 1 ? "s" : "";
 
-      //change to "if no only contain numbers"
-      if (inputElm.validity.patternMismatch) {
-        errorMessage = "Please enter five digit zip code";
+        errorMessage = `Please enter ${numDigitsNeeded} more digit${sCharacter}`;
       }
 
-      if (inputElm.validity.tooShort) {
-        //test
-        console.log("short/bad");
-        errorMessage = `Please enter ${inputElm.maxLength - inputElm.value.length} more digits`;
+      if (!isOnlyNumbers(inputElm.value)) {
+        errorMessage = "Please enter digits only";
       }
     }
 
@@ -202,11 +241,11 @@ function getErrorMessage(inputElm) {
   //confirm-password-input
   if (inputElm.id === "confirm-password-input") {
     //error cases
-    if (inputElm.value === "") {
-      errorMessage = "Please confirm your password";
-    }
     if (passwordInput.value !== inputElm.value) {
-      errorMessage = "Passwords do no match. Please confirm.";
+      errorMessage = "Passwords do no match; please confirm";
+    }
+    if (!passwordInput.checkValidity()) {
+      errorMessage = "Please create valid password first";
     }
   }
 
@@ -218,9 +257,9 @@ function updateZipCodePattern() {
   const countrySelection = countryInput.value;
 
   if (countrySelection === "" || countrySelection === "other") {
-    zipCodeInput.setAttribute("pattern", "");
-    zipCodeInput.setAttribute("minLength", "");
-    zipCodeInput.setAttribute("maxLength", "");
+    zipCodeInput.removeAttribute("pattern");
+    zipCodeInput.removeAttribute("minLength");
+    zipCodeInput.removeAttribute("maxLength");
   }
   if (countrySelection === "US" || countrySelection === "MX") {
     zipCodeInput.setAttribute("pattern", "^\\d{5}$");
@@ -262,4 +301,8 @@ function addClassToElm(elm, className) {
 
 function removeClassFromElm(elm, className) {
   elm.classList.remove(className);
+}
+
+function isOnlyNumbers(str) {
+  return /^[0-9]+$/.test(str);
 }

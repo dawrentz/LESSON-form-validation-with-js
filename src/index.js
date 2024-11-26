@@ -8,12 +8,3 @@ import * as formValidationMod from "./formValidationMod.js";
 
 //init formValidation
 formValidationMod.initFormValidation();
-
-const password = "sS2!";
-
-// Test for at least one lowercase letter using a positive lookahead
-if (/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(password)) {
-  console.log("pass test");
-} else {
-  console.log("failed test");
-}
