@@ -107,20 +107,19 @@ function addELsToFormInputs() {
     }
   });
 
-  //on password touch
-  passwordInput.addEventListener("blur", () => {
-    //if valid password, update confirmPasword pattern to the password value
-    if (passwordInput.checkValidity()) {
-      updateConfirmPasswordPattern();
-    }
-  });
-
   //on password input
   passwordInput.addEventListener("input", () => {
-    //update no-set-password class (for confirm-password error styling)
+    //if valid on input
     if (passwordInput.checkValidity()) {
+      //update no-set-password class (for confirm-password error styling)
       removeClassFromElm(confirmPasswordInput, "no-set-password");
-    } else {
+
+      //update passwordPattern
+      updateConfirmPasswordPattern();
+    }
+    //if invalid on input
+    else {
+      //update no-set-password class (for confirm-password error styling)
       addClassToElm(confirmPasswordInput, "no-set-password");
     }
 
