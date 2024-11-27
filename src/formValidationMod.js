@@ -23,26 +23,29 @@ export function initFormValidation() {
 {
 } //spacer
 
+//novalidate is turned on in html
 function addELtoFromSubmit() {
   form1.addEventListener("submit", (event) => {
+    //if form is valid
     if (form1.checkValidity()) {
-      console.log("high five");
-      form1.reset();
+      alert("high five!");
 
+      //reset fields
+      form1.reset();
+      //reset classes
       allFieldInputs.forEach((fieldInput) => {
         removeClassFromElm(fieldInput, "touched");
       });
-    } else {
-      // showFormInputError(event);
-
-      console.log("error in form");
+    }
+    //if form is invalid
+    else {
       allFieldInputs.forEach((fieldInput) => {
         showErrorMessage(fieldInput);
+        //all inputs get checked so treat all as "touched"
         addClassToElm(fieldInput, "touched");
       });
     }
 
-    //novalidate is turned on in html
     //prevent all  form submissions to avoid page refresh
     event.preventDefault();
   });
@@ -50,53 +53,55 @@ function addELtoFromSubmit() {
 
 //these should probably all be individual checkerFunctions, but ain't nobody got time for that
 function addELsToFormInputs() {
-  //on any input blur. For inoffensive UI (delayed negative feedback/checks)
+  //on any input blur
+  //for inoffensive UI (delayed negative feedback/checks)
   allFieldInputs.forEach((fieldInput) => {
     fieldInput.addEventListener("blur", () => {
-      //Check for/update error
+      //check for/update error
       showErrorMessage(fieldInput);
 
-      //add "touched class"
+      //add "touched class" (touched means "user has left or is finished with the input")
       addClassToElm(fieldInput, "touched");
     });
   });
 
-  //on any input input. For immediate positive feedback: nice UI
+  //on any input input
+  //for immediate positive feedback (nice UI)
   allFieldInputs.forEach((fieldInput) => {
     fieldInput.addEventListener("input", () => {
-      //Check for no error on each input (if already touched)
+      //Check for error update on each input (if already touched)
+      //this also "deletes" the error message if no error
       if (fieldInput.classList.contains("touched")) {
         showErrorMessage(fieldInput);
       }
-      //on all other inputs, just erase error-message on valid-input
-      else if (fieldInput.checkValidity()) {
-        removeErrorMessage(fieldInput);
-      }
+      // this looks to be unneeded. early on, had to seperate the error messsage creation and deletion
+      // //on all other inputs, just erase error-message on valid-input (for touched or non-touched)
+      // else if (fieldInput.checkValidity()) {
+      //   // removeErrorMessage(fieldInput);
+      // }
     });
   });
 
   //on country input
+  //idea: if country set to "other", could render a text input
   countryInput.addEventListener("change", () => {
-    //update zip pattern
+    //update zip pattern (zip pattern changes depending on the county formatting)
     updateZipCodePattern();
-    //works a little differnt that the <input>'s
-    showErrorMessage(countryInput);
 
+    //update county error message if touched
+    //works a little different that the <input>'s (country is a <select> dropdown, the UI feels better to update error message on "change" vs "blur")
+    if (countryInput.classList.contains("touched")) {
+      showErrorMessage(countryInput);
+    }
+
+    //update no-country input class (for zip code error styling)
     if (countryInput.value !== "") {
       removeClassFromElm(zipCodeInput, "no-country-input");
     } else {
       addClassToElm(zipCodeInput, "no-country-input");
     }
 
-    //check zip code error here
-    if (zipCodeInput.classList.contains("touched")) {
-      showErrorMessage(zipCodeInput);
-    }
-  });
-
-  // on zip input (for digit counter)
-  zipCodeInput.addEventListener("input", () => {
-    //only counts if already initiated (that is, "touched")
+    //check zip code error if zip code touched
     if (zipCodeInput.classList.contains("touched")) {
       showErrorMessage(zipCodeInput);
     }
@@ -104,6 +109,7 @@ function addELsToFormInputs() {
 
   //on password touch
   passwordInput.addEventListener("blur", () => {
+    //if valid password, update confirmPasword pattern to the password value
     if (passwordInput.checkValidity()) {
       updateConfirmPasswordPattern();
     }
@@ -111,19 +117,21 @@ function addELsToFormInputs() {
 
   //on password input
   passwordInput.addEventListener("input", () => {
+    //update no-set-password class (for confirm-password error styling)
     if (passwordInput.checkValidity()) {
       removeClassFromElm(confirmPasswordInput, "no-set-password");
     } else {
       addClassToElm(confirmPasswordInput, "no-set-password");
     }
 
+    //update no-match-password class (for confirm-password error styling)
     if (passwordInput.value === confirmPasswordInput.value) {
       removeClassFromElm(confirmPasswordInput, "no-match-password");
     } else {
       addClassToElm(confirmPasswordInput, "no-match-password");
     }
 
-    //confirmpass touched run errorcheck
+    //update error message if touched already
     if (confirmPasswordInput.classList.contains("touched")) {
       showErrorMessage(confirmPasswordInput);
     }
@@ -132,6 +140,7 @@ function addELsToFormInputs() {
   //on confirm password input
   confirmPasswordInput.addEventListener("input", () => {
     //DRY, oops. really should make all these cases into checkerFunctions
+    //update no-match-password class (for confirm-password error styling)
     if (passwordInput.value === confirmPasswordInput.value) {
       removeClassFromElm(confirmPasswordInput, "no-match-password");
     } else {
@@ -144,23 +153,28 @@ function addELsToFormInputs() {
 {
 } //spacer
 
-//does not erase error messages
 function showErrorMessage(fieldInput) {
-  //get errorMessageElm and error message
+  //get errorMessageElm and error message, and render
   const errorElm = getErrorElm(fieldInput);
   const errorMessage = getErrorMessage(fieldInput);
   setErrorMessage(errorElm, errorMessage);
 }
 
-//for input-event (checks for only valid on each input)
-function removeErrorMessage(inputEventElm) {
-  const errorElm = getErrorElm(inputEventElm);
-  setErrorMessage(errorElm, "");
-}
+// this looks to be unneeded. early on, had to seperate the error messsage creation and deletion
+// //does not populate error messages
+// //had to seperate the creation and deletion of the error messages early on (for some reason). it may be okay to combine now
+// function removeErrorMessage(inputEventElm) {
+//   const errorElm = getErrorElm(inputEventElm);
+//   setErrorMessage(errorElm, "");
+// }
 
 //group all field inputs and list out all error cases. Search through databank
 function getErrorMessage(inputElm) {
-  let errorMessage;
+  // this looks to be unneeded. early on, had to seperate the error messsage creation and deletion
+  // let errorMessage;
+
+  //init to "" to "delete" error messages
+  let errorMessage = "";
 
   //email-input
   if (inputElm.id === "email-input") {
@@ -181,12 +195,12 @@ function getErrorMessage(inputElm) {
   }
 
   //zip-code-input
-  //need cases for other countries
   if (inputElm.id === "zip-code-input") {
-    //error cases
+    //country groups
 
     // USA/Mexico
     if (countryInput.value === "US" || countryInput.value === "MX") {
+      //error cases
       if (inputElm.validity.tooShort) {
         const numDigitsNeeded = inputElm.maxLength - inputElm.value.length;
         let sCharacter = numDigitsNeeded > 1 ? "s" : "";
@@ -201,6 +215,7 @@ function getErrorMessage(inputElm) {
 
     // Canada
     if (countryInput.value === "CA") {
+      //error cases
       if (inputElm.validity.patternMismatch) {
         errorMessage =
           'Please follow pattern: "ANA NAN" (A = alpha, N = number)';
@@ -257,11 +272,13 @@ function updateZipCodePattern() {
   const countrySelection = countryInput.value;
 
   if (countrySelection === "" || countrySelection === "other") {
+    //remove all (empty pattern was making an issue)
     zipCodeInput.removeAttribute("pattern");
     zipCodeInput.removeAttribute("minLength");
     zipCodeInput.removeAttribute("maxLength");
   }
   if (countrySelection === "US" || countrySelection === "MX") {
+    //pattern is "NNNNN" (n = number)
     zipCodeInput.setAttribute("pattern", "^\\d{5}$");
     zipCodeInput.setAttribute("minLength", "5");
     zipCodeInput.setAttribute("maxLength", "5");
@@ -278,6 +295,7 @@ function updateZipCodePattern() {
 }
 
 function updateConfirmPasswordPattern() {
+  //pattern is whatever the valid password is
   confirmPasswordInput.setAttribute("pattern", passwordInput.value);
 }
 

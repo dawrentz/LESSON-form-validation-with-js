@@ -145,8 +145,6 @@ button {
     outline: black solid 1px;
   }
 
-  /* add a "touched" class in js to trigger this? */
-
   &:invalid&.touched {
     border: red solid 1px;
 
@@ -158,6 +156,7 @@ button {
 }
 
 /* special case: password is not set but confirm password has been touched and has error message */
+/* special case: password does not match and confirm password has been touched and has error message */
 #confirm-password-input.no-set-password.touched,
 #confirm-password-input.no-match-password.touched {
   border: red solid 1px;
@@ -168,6 +167,7 @@ button {
   }
 }
 
+/* special case: country is not set but zip code has been touched and has error message */
 #zip-code-input.no-country-input.touched {
   border: red solid 1px;
 
@@ -176,5 +176,3 @@ button {
     outline: red solid 1px;
   }
 }
-/* special case: password is not set but confirm password has been touched and has error message */
-/* same for zip without selection, if no-country-input and touched, then red outline */
